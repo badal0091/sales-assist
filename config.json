@@ -1,0 +1,45 @@
+{
+    "demos": [
+      {
+        "title": "Activity Data",
+        "file": "Updated Structured Data for Customer and Sales View/activity data.csv"
+      },
+      {
+        "title": "Advisor Details",
+        "file": "Updated Structured Data for Customer and Sales View/Advisor Details.csv"
+      },
+      {
+        "title": "Asset Data",
+        "file": "Updated Structured Data for Customer and Sales View/Asset data.csv"
+      },
+      {
+        "title": "Audit History",
+        "file": "Updated Structured Data for Customer and Sales View/Audit History.csv"
+      },
+      {
+        "title": "Email Data",
+        "file": "Updated Structured Data for Customer and Sales View/email data.csv"
+      },
+      {
+        "title": "Opportunity Data",
+        "file": "Updated Structured Data for Customer and Sales View/Opoortunity data.csv"
+      },
+      {
+        "title": "Product Details Data",
+        "file": "Updated Structured Data for Customer and Sales View/Product details.csv"
+      },
+      {
+        "title": "Transaction Data",
+        "file": "Updated Structured Data for Customer and Sales View/Transaction data.csv"
+      },
+      {
+        "title": "Webcast Data",
+        "file": "Updated Structured Data for Customer and Sales View/Webcast data.csv"
+      },
+      {
+        "title": "Website Data",
+        "file": "Updated Structured Data for Customer and Sales View/Website data.csv"
+      }
+    ]
+  }
+  
