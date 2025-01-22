@@ -378,7 +378,14 @@ Wrap columns with spaces inside [].`,
   if (data.length > 0) {
     latestQueryResult = data;
     const actions = html`
-      
+      <div class="row align-items-center g-2">
+        <div class="col-auto">
+          <button id="download-button" type="button" class="btn btn-primary">
+            <i class="bi bi-filetype-csv"></i>
+            Download CSV
+          </button>
+        </div>
+      </div>      
     `;
     const tableHtml = renderTable(data.slice(0, 100));
     render([actions, tableHtml], $result);
