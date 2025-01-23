@@ -300,6 +300,24 @@ async function drawTables() {
     </div>
   `;
 
+  const systemPrompt = html`
+    <div id="system-prompt-container" class="container my-3">
+      <label for="system-prompt" class="form-label fw-bold">System Prompt:</label>
+      <textarea
+        id="system-prompt"
+        class="form-control"
+        rows="5"
+      >You'll answer the user's question based on this SQLite schema:
+
+1. Guess my objective in asking this.
+2. Describe the steps to achieve this objective in SQL.
+3. Write SQL to answer the question. Use SQLite syntax.
+
+Replace generic filter values (e.g. "a location", "specific region", etc.) by querying a random value from data.
+Wrap columns with spaces inside [].</textarea>
+    </div>
+  `;
+
   const query = html`
     <form class="mt-4 narrative mx-auto">
       <div class="mb-3">
@@ -310,7 +328,7 @@ async function drawTables() {
     </form>
   `;
 
-  render([tables, ...(schema.length ? [html`<div class="text-center my-3">${loading}</div>`, query] : [])], $tablesContainer);
+  render([tables, systemPrompt, ...(schema.length ? [html`<div class="text-center my-3">${loading}</div>`, query] : [])], $tablesContainer);
   if (!schema.length) return;
 
   const $query = $tablesContainer.querySelector("#query");
@@ -321,6 +339,7 @@ async function drawTables() {
     render(
       [
         tables,
+        systemPrompt,
         html`<div class="mx-auto narrative my-3">
           <h2 class="h6">Sample questions</h2>
           <ul>
@@ -406,14 +425,15 @@ function notify(cls, title, message) {
   toast.show();
 }
 
-async function llm({ system, user, schema }) {
+async function llm({ user, schema }) {
+  const systemPrompt = document.getElementById("system-prompt").value; // Get the user-provided system prompt
   const response = await fetch("https://llmfoundry.straive.com/openai/v1/chat/completions", {
     method: "POST",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}:datachat` },
     body: JSON.stringify({
       model: "gpt-4o-mini",
       messages: [
-        { role: "system", content: system },
+        { role: "system", content: systemPrompt }, // Use the user-provided system prompt
         { role: "user", content: user },
       ],
       temperature: 0,
