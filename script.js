@@ -308,7 +308,9 @@ async function drawTables() {
         class="form-control"
         rows="5"
       >You'll answer the user's question based on this SQLite schema:
-
+         ${DB.schema()
+  .map(({ sql }) => sql)
+  .join("\n\n")}
 1. Guess my objective in asking this.
 2. Describe the steps to achieve this objective in SQL.
 3. Write SQL to answer the question. Use SQLite syntax.
