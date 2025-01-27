@@ -412,37 +412,6 @@ Wrap columns with spaces inside [].`,
             Download CSV
           </button>
         </div>
-        <div class="col">
-
-          <input
-
-            type="text"
-
-            id="chart-input"
-
-            name="chart-input"
-
-            class="form-control"
-
-            placeholder="Describe what you want to chart"
-
-            value="Draw the most appropriate chart to visualize this data"
-
-          />
-
-        </div>
-
-        <div class="col-auto">
-
-          <button id="chart-button" type="button" class="btn btn-primary">
-
-            <i class="bi bi-bar-chart-line"></i>
-
-            Draw Chart
-
-          </button>
-
-        </div>
       </div>
     `;
     const tableHtml = renderTable(data.slice(0, 100));
@@ -464,15 +433,15 @@ function notify(cls, title, message) {
   toast.show();
 }
 
-async function llm({ system, user, schema }) {
-  // const systemPrompt = document.getElementById("system-prompt").value; // Get the system prompt from the textarea
+async function llm({ user, schema }) {
+  const systemPrompt = document.getElementById("system-prompt").value; // Get the system prompt from the textarea
   const response = await fetch("https://llmfoundry.straive.com/openai/v1/chat/completions", {
     method: "POST",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}:datachat` },
     body: JSON.stringify({
       model: "gpt-4o-mini",
       messages: [
-        { role: "system", content: system}, // Use the custom system prompt
+        { role: "system", content: systemPrompt}, // Use the custom system prompt
         { role: "user", content: user },
       ],
       temperature: 0,
