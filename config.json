@@ -13,6 +13,12 @@
         "Updated Structured Data for Customer and Sales View/Transaction data.csv",
         "Updated Structured Data for Customer and Sales View/Webcast data.csv",
         "Updated Structured Data for Customer and Sales View/Website data.csv"
+      ],
+      "questions": [
+        " Give me the list of advisor who has not been contacted by Sales AM 1 from December-24 onwards?",
+        " Which advisor  had Download when visited website pertaining to ETF page for Sales AM 1?",
+        "Which Advisor visited the website through Email medium in December  under Sales AM 1 along with  which website url visited?",
+        "Which advisor visited website pertaining income product page in month of Dec 24?"
       ]
       }
     ]
