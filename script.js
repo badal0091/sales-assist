@@ -464,15 +464,15 @@ function notify(cls, title, message) {
   toast.show();
 }
 
-async function llm({ user, schema }) {
-  const systemPrompt = document.getElementById("system-prompt").value; // Get the system prompt from the textarea
+async function llm({ system, user, schema }) {
+  // const systemPrompt = document.getElementById("system-prompt").value; // Get the system prompt from the textarea
   const response = await fetch("https://llmfoundry.straive.com/openai/v1/chat/completions", {
     method: "POST",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}:datachat` },
     body: JSON.stringify({
       model: "gpt-4o-mini",
       messages: [
-        { role: "system", content: systemPrompt}, // Use the custom system prompt
+        { role: "system", content: system}, // Use the custom system prompt
         { role: "user", content: user },
       ],
       temperature: 0,
