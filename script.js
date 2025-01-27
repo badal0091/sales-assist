@@ -313,16 +313,148 @@ async function drawTables() {
         class="form-control"
         rows="5"
       >You'll answer the user's question based on this SQLite schema:
-      ${DB.schema()
-  .map(({ sql }) => sql)
-  .join("\n\n")}
-
 1. Guess my objective in asking this.
 2. Describe the steps to achieve this objective in SQL.
 3. Write SQL to answer the question. Use SQLite syntax.
 
 Replace generic filter values (e.g. "a location", "specific region", etc.) by querying a random value from data.
-Wrap columns with spaces inside [].</textarea>
+Wrap columns with spaces inside [].
+Below is the metadata for the tables loaded
+below is the meta data for all the tables so that if helps to generate answers
+accordingly
+the format is TableName-Column Name :Discription(discription of that column)
+
+Advisor Details-Advisor ID: Unique identifier for each advisor.
+Advisor Details-Name: Name of the advisor.
+Advisor Details-Firm Name: Name of the firm the advisor works for.
+Advisor Details-Email Address: Contact email of the advisor.
+Advisor Details-City: Geographical details of the advisor.
+Advisor Details-State: Geographical details of the advisor.
+Advisor Details-Country: Geographical details of the advisor.
+Advisor Details-Client Industry: The industry of clients the advisor serves (e.g.,
+Financial Advisor, RIA).
+Advisor Details-Insert data: Dates when the data was inserted
+Advisor Details-Last updated date: Dates when the data was last updated.
+Advisor Details-Lead AM: Account manager associated with the advisor.
+Advisor Details-Data Hygiene: The quality of data associated with the advisor (e.g.,
+&quot;Healthy data&quot;).
+Advisor Details-Age:Age of an Advisor
+Advisor Details-Phone number:Phone number of an advisor
+Product Details-Product Name: The name of the product.
+Product Details-Product Type: Type or category of the product (e.g., ETF, MF).
+
+Product Details-Category: The financial or investment category of the product.
+Product Details-Strategy: The strategy behind the product (e.g., &quot;Global Investment
+Opportunities&quot;).
+Product Details-Mstar Category:Morningstar categories
+Product Details-Share Class:refers to a specific type or category of shares in a
+company
+Transaction Daata-Transaction ID: Unique identifier for each transaction.
+Transaction Daata-Advisor ID: Links to the advisor making the transaction.
+Transaction Daata-Product ID:ID of particular product
+Transaction Daata-Transaction Amount: The monetary value of the transaction.
+Transaction Daata-Transaction Date: Date of the transaction.
+Transaction Daata-Type of Class:Whether the transaction was pertaining to a sale or
+a redemption
+Asset Details-Asset ID: Unique identifier for each asset.
+Asset Details-Advisor ID: Links to the advisor managing the asset.
+Asset Details-AUM:Asset under management of advisor
+Asset Details-Date: Date when the asset was added to the portfolio of an advsior
+Asset details-Share Class:refers to a specific type or category of shares in a
+company
+Asset details-Product ID:ID of particular product
+Activity data-Activity ID: Unique identifier for each activity.
+Activity data-Advisor ID: Links to the advisor performing the activity.
+Activity data-Activity Type: Type of activity with the advisor (e.g., meeting , call ,
+email , voicemail , outbound call , inbound call)
+Activity data-Activity Date: Date of the activity.
+Activity data-Description:Topic discussed in the activity that happened
+Activity data-Product:Product link to that activity
+Website data-Email address:Advisor email address that visited the website
+Website data-URL:the link of website visited
+Website data-Event type:type of event occurred (eg page view , download , click
+,form view , form submission , product view , video view )
+
+Website data-Engagement Time (sec):the time spent on that particular event
+measured in seconds
+Website data-Traffic medium: marketing channel where the advisor is coming to
+website
+Website data-Date:Webiste visit date
+Webcast data-Webcast name:name of webcast
+Webcast data-Date:webcast date
+Webcast data-Speaker:Webcast speaker
+Webcast data-Topic:Topic for webcast
+Webcast data-Product:Prodoct associated with webcast
+Webcast data-Attendee:1 indictaes advisor who actually attendeed the webcast
+Webcast data-Invitee:1 indicates advisor who were invited for webcast
+Webcast data-Registrant:1 Indicates people who registered for webcast
+Webcast data-Email address:email address of the advisor
+Webcast data-Session duration:Total time spent
+Email data-Email address: Unique identifier for each advisor.
+Email data-campaign name:Name of email campaign
+Email data-Send Date: The date the email was sent.
+Email data-Delivered: The number of emails delivered.
+Email data-Open: The number of emails opened
+Email data-Click: The number of recipients who clicked a link within the email.
+Email data-Subject Line: The subject line of the email.
+Email data-URL Clicked:the link clicked on the email content
+Opportunity Data-Advisor ID: Unique identifier for each advisor.
+Opportunity Data-Firm AUM: Assets under management by the firm.
+Opportunity Data-Opportunity Size: The monetary value of the opportunity at advisor
+level
+Opportunity Data-Global AUM:Total Assest under management of an advisor
+including current firm
+Opportunity Data-Category Potential: Potential category for the opportunity (e.g.,
+Low, Medium, High).
+
+Opportunity Data-Mstar category:Morningstar categories
+Opportunity Data-Category:Product of Mstar category
+
+Refined Steps to Achieve the Objective in SQL:
+1. Base Table Selection:
+o Always use the Advisor Details table as the base for joining with other
+datasets (use email address or advisor ID as necessary for the join).
+
+2. Date Format:
+o Ensure the date format is consistent in all queries (yyyy-mm-dd).
+3. Multiple Selections in WHERE Clause:
+o Use the IN keyword when specifying multiple values in the WHERE
+clause.
+
+4. Asset Under Management (AUM):
+o For AUM calculations, always use the Asset Details table, and sum
+the AUM for the month when requested.
+
+5. Purchase/Redemption Information:
+o To identify purchases or redemptions, use the Type of Class column in
+the Transaction Data table.
+
+6. Sales AM 1:
+o For any request about Sales AM 1, filter on the Lead AM column in the
+Advisor Details table.
+
+7. Case Consistency in WHERE Conditions:
+o Always ensure case consistency using LOWER() or UPPER() functions
+on both the LHS and RHS of conditions in the WHERE clause.
+
+8. Advisor Information:
+o When asked about an advisor, provide the advisor name, email
+address, and advisor ID along with other information.
+
+9. Join Consistency:
+o Use proper joining techniques (e.g., INNER JOIN or LEFT JOIN) and
+filter on relevant fields to maintain consistency and ensure accurate
+results.
+
+Key Considerations for Accurate Query Output:
+ Always join with Advisor Details as the base.
+ Ensure the use of functions like SUM(), LOWER(), UPPER(), and correct date
+handling when calculating or filtering.
+ Be mindful of the filters and joins to ensure they are correctly applied based
+on business logic (e.g., using IN for multiple selections, filtering by Lead AM
+for Sales AM 1, and using the correct table for AUM).
+ When aggregating or summing data, make sure the relevant fields (such as
+AUM) are properly summed for the correct period.</textarea>
     </div>
   `;
 
@@ -392,7 +524,143 @@ ${DB.schema()
 3. Write SQL to answer the question. Use SQLite sytax.
 
 Replace generic filter values (e.g. "a location", "specific region", etc.) by querying a random value from data.
-Wrap columns with spaces inside [].`,
+Wrap columns with spaces inside [].
+Below is the metadata for the tables loaded
+below is the meta data for all the tables so that if helps to generate answers
+accordingly
+the format is TableName-Column Name :Discription(discription of that column)
+
+Advisor Details-Advisor ID: Unique identifier for each advisor.
+Advisor Details-Name: Name of the advisor.
+Advisor Details-Firm Name: Name of the firm the advisor works for.
+Advisor Details-Email Address: Contact email of the advisor.
+Advisor Details-City: Geographical details of the advisor.
+Advisor Details-State: Geographical details of the advisor.
+Advisor Details-Country: Geographical details of the advisor.
+Advisor Details-Client Industry: The industry of clients the advisor serves (e.g.,
+Financial Advisor, RIA).
+Advisor Details-Insert data: Dates when the data was inserted
+Advisor Details-Last updated date: Dates when the data was last updated.
+Advisor Details-Lead AM: Account manager associated with the advisor.
+Advisor Details-Data Hygiene: The quality of data associated with the advisor (e.g.,
+&quot;Healthy data&quot;).
+Advisor Details-Age:Age of an Advisor
+Advisor Details-Phone number:Phone number of an advisor
+Product Details-Product Name: The name of the product.
+Product Details-Product Type: Type or category of the product (e.g., ETF, MF).
+
+Product Details-Category: The financial or investment category of the product.
+Product Details-Strategy: The strategy behind the product (e.g., &quot;Global Investment
+Opportunities&quot;).
+Product Details-Mstar Category:Morningstar categories
+Product Details-Share Class:refers to a specific type or category of shares in a
+company
+Transaction Daata-Transaction ID: Unique identifier for each transaction.
+Transaction Daata-Advisor ID: Links to the advisor making the transaction.
+Transaction Daata-Product ID:ID of particular product
+Transaction Daata-Transaction Amount: The monetary value of the transaction.
+Transaction Daata-Transaction Date: Date of the transaction.
+Transaction Daata-Type of Class:Whether the transaction was pertaining to a sale or
+a redemption
+Asset Details-Asset ID: Unique identifier for each asset.
+Asset Details-Advisor ID: Links to the advisor managing the asset.
+Asset Details-AUM:Asset under management of advisor
+Asset Details-Date: Date when the asset was added to the portfolio of an advsior
+Asset details-Share Class:refers to a specific type or category of shares in a
+company
+Asset details-Product ID:ID of particular product
+Activity data-Activity ID: Unique identifier for each activity.
+Activity data-Advisor ID: Links to the advisor performing the activity.
+Activity data-Activity Type: Type of activity with the advisor (e.g., meeting , call ,
+email , voicemail , outbound call , inbound call)
+Activity data-Activity Date: Date of the activity.
+Activity data-Description:Topic discussed in the activity that happened
+Activity data-Product:Product link to that activity
+Website data-Email address:Advisor email address that visited the website
+Website data-URL:the link of website visited
+Website data-Event type:type of event occurred (eg page view , download , click
+,form view , form submission , product view , video view )
+
+Website data-Engagement Time (sec):the time spent on that particular event
+measured in seconds
+Website data-Traffic medium: marketing channel where the advisor is coming to
+website
+Website data-Date:Webiste visit date
+Webcast data-Webcast name:name of webcast
+Webcast data-Date:webcast date
+Webcast data-Speaker:Webcast speaker
+Webcast data-Topic:Topic for webcast
+Webcast data-Product:Prodoct associated with webcast
+Webcast data-Attendee:1 indictaes advisor who actually attendeed the webcast
+Webcast data-Invitee:1 indicates advisor who were invited for webcast
+Webcast data-Registrant:1 Indicates people who registered for webcast
+Webcast data-Email address:email address of the advisor
+Webcast data-Session duration:Total time spent
+Email data-Email address: Unique identifier for each advisor.
+Email data-campaign name:Name of email campaign
+Email data-Send Date: The date the email was sent.
+Email data-Delivered: The number of emails delivered.
+Email data-Open: The number of emails opened
+Email data-Click: The number of recipients who clicked a link within the email.
+Email data-Subject Line: The subject line of the email.
+Email data-URL Clicked:the link clicked on the email content
+Opportunity Data-Advisor ID: Unique identifier for each advisor.
+Opportunity Data-Firm AUM: Assets under management by the firm.
+Opportunity Data-Opportunity Size: The monetary value of the opportunity at advisor
+level
+Opportunity Data-Global AUM:Total Assest under management of an advisor
+including current firm
+Opportunity Data-Category Potential: Potential category for the opportunity (e.g.,
+Low, Medium, High).
+
+Opportunity Data-Mstar category:Morningstar categories
+Opportunity Data-Category:Product of Mstar category
+
+Refined Steps to Achieve the Objective in SQL:
+1. Base Table Selection:
+o Always use the Advisor Details table as the base for joining with other
+datasets (use email address or advisor ID as necessary for the join).
+
+2. Date Format:
+o Ensure the date format is consistent in all queries (yyyy-mm-dd).
+3. Multiple Selections in WHERE Clause:
+o Use the IN keyword when specifying multiple values in the WHERE
+clause.
+
+4. Asset Under Management (AUM):
+o For AUM calculations, always use the Asset Details table, and sum
+the AUM for the month when requested.
+
+5. Purchase/Redemption Information:
+o To identify purchases or redemptions, use the Type of Class column in
+the Transaction Data table.
+
+6. Sales AM 1:
+o For any request about Sales AM 1, filter on the Lead AM column in the
+Advisor Details table.
+
+7. Case Consistency in WHERE Conditions:
+o Always ensure case consistency using LOWER() or UPPER() functions
+on both the LHS and RHS of conditions in the WHERE clause.
+
+8. Advisor Information:
+o When asked about an advisor, provide the advisor name, email
+address, and advisor ID along with other information.
+
+9. Join Consistency:
+o Use proper joining techniques (e.g., INNER JOIN or LEFT JOIN) and
+filter on relevant fields to maintain consistency and ensure accurate
+results.
+
+Key Considerations for Accurate Query Output:
+ Always join with Advisor Details as the base.
+ Ensure the use of functions like SUM(), LOWER(), UPPER(), and correct date
+handling when calculating or filtering.
+ Be mindful of the filters and joins to ensure they are correctly applied based
+on business logic (e.g., using IN for multiple selections, filtering by Lead AM
+for Sales AM 1, and using the correct table for AUM).
+ When aggregating or summing data, make sure the relevant fields (such as
+AUM) are properly summed for the correct period.`,
     user: query,
   });
   render(html`${unsafeHTML(marked.parse(result))}`, $sql);
@@ -411,6 +679,37 @@ Wrap columns with spaces inside [].`,
             <i class="bi bi-filetype-csv"></i>
             Download CSV
           </button>
+        </div>
+        <div class="col">
+
+          <input
+
+            type="text"
+
+            id="chart-input"
+
+            name="chart-input"
+
+            class="form-control"
+
+            placeholder="Describe what you want to chart"
+
+            value="Draw the most appropriate chart to visualize this data"
+
+          />
+
+        </div>
+
+        <div class="col-auto">
+
+          <button id="chart-button" type="button" class="btn btn-primary">
+
+            <i class="bi bi-bar-chart-line"></i>
+
+            Draw Chart
+
+          </button>
+
         </div>
       </div>
     `;
@@ -433,15 +732,15 @@ function notify(cls, title, message) {
   toast.show();
 }
 
-async function llm({ user, schema }) {
-  const systemPrompt = document.getElementById("system-prompt").value; // Get the system prompt from the textarea
+async function llm({ system, user, schema }) {
+  // const systemPrompt = document.getElementById("system-prompt").value; // Get the system prompt from the textarea
   const response = await fetch("https://llmfoundry.straive.com/openai/v1/chat/completions", {
     method: "POST",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}:datachat` },
     body: JSON.stringify({
       model: "gpt-4o-mini",
       messages: [
-        { role: "system", content: systemPrompt}, // Use the custom system prompt
+        { role: "system", content: system}, // Use the custom system prompt
         { role: "user", content: user },
       ],
       temperature: 0,
