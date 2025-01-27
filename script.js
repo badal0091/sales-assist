@@ -82,12 +82,15 @@ fetch("config.json")
   .then(({ demos }) =>
     render(
       demos.map(
-        ({ title, body, file, questions }) =>
-          html` <div class="col py-3">
-            <a class="demo card h-100 text-decoration-none" href="${file}" data-questions=${JSON.stringify(questions ?? [])}>
+        ({ title, files}) =>
+          html`<div class="col py-3">
+            <a
+              class="demo card h-100 text-decoration-none"
+              href="#"
+              data-files=${JSON.stringify(files)}
+            >
               <div class="card-body">
                 <h5 class="card-title">${title}</h5>
-                <p class="card-text">${body}</p>
               </div>
             </a>
           </div>`
@@ -96,21 +99,23 @@ fetch("config.json")
     )
   );
 
-$demos.addEventListener("click", async (e) => {
-  const $demo = e.target.closest(".demo");
-  if ($demo) {
-    e.preventDefault();
-    const file = $demo.getAttribute("href");
-    render(html`<div class="text-center my-3">${loading}</div>`, $tablesContainer);
-    await DB.upload(new File([await fetch(file).then((r) => r.blob())], file.split("/").pop()));
-    const questions = JSON.parse($demo.dataset.questions);
-    if (questions.length) {
-      DB.questionInfo.schema = JSON.stringify(DB.schema());
-      DB.questionInfo.questions = questions;
+  $demos.addEventListener("click", async (e) => {
+    const $demo = e.target.closest(".demo");
+    if ($demo) {
+      e.preventDefault();
+      const files = JSON.parse($demo.dataset.files); // Parse the files array
+      render(html`<div class="text-center my-3">${loading}</div>`, $tablesContainer);
+  
+      // Import all files associated with the tile
+      for (const file of files) {
+        const fileBlob = await fetch(file).then((r) => r.blob());
+        const fileName = file.split("/").pop();
+        await DB.upload(new File([fileBlob], fileName));
+      }
+  
+      drawTables();
     }
-    drawTables();
-  }
-});
+  });
 
 // --------------------------------------------------------------------
 // Manage database tables
@@ -308,9 +313,10 @@ async function drawTables() {
         class="form-control"
         rows="5"
       >You'll answer the user's question based on this SQLite schema:
-         ${DB.schema()
+      ${DB.schema()
   .map(({ sql }) => sql)
   .join("\n\n")}
+
 1. Guess my objective in asking this.
 2. Describe the steps to achieve this objective in SQL.
 3. Write SQL to answer the question. Use SQLite syntax.
@@ -406,7 +412,38 @@ Wrap columns with spaces inside [].`,
             Download CSV
           </button>
         </div>
-      </div>      
+        <div class="col">
+
+          <input
+
+            type="text"
+
+            id="chart-input"
+
+            name="chart-input"
+
+            class="form-control"
+
+            placeholder="Describe what you want to chart"
+
+            value="Draw the most appropriate chart to visualize this data"
+
+          />
+
+        </div>
+
+        <div class="col-auto">
+
+          <button id="chart-button" type="button" class="btn btn-primary">
+
+            <i class="bi bi-bar-chart-line"></i>
+
+            Draw Chart
+
+          </button>
+
+        </div>
+      </div>
     `;
     const tableHtml = renderTable(data.slice(0, 100));
     render([actions, tableHtml], $result);
@@ -428,14 +465,14 @@ function notify(cls, title, message) {
 }
 
 async function llm({ user, schema }) {
-  const systemPrompt = document.getElementById("system-prompt").value; // Get the user-provided system prompt
+  const systemPrompt = document.getElementById("system-prompt").value; // Get the system prompt from the textarea
   const response = await fetch("https://llmfoundry.straive.com/openai/v1/chat/completions", {
     method: "POST",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}:datachat` },
     body: JSON.stringify({
       model: "gpt-4o-mini",
       messages: [
-        { role: "system", content: systemPrompt }, // Use the user-provided system prompt
+        { role: "system", content: systemPrompt}, // Use the custom system prompt
         { role: "user", content: user },
       ],
       temperature: 0,
@@ -450,7 +487,6 @@ async function llm({ user, schema }) {
     return { error: e };
   }
 }
-
 // Utility function to render a table
 function renderTable(data) {
   const columns = Object.keys(data[0]);
