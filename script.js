@@ -82,12 +82,12 @@ fetch("config.json")
   .then(({ demos }) =>
     render(
       demos.map(
-        ({ title, files}) =>
+        ({ title, files, questions}) =>
           html`<div class="col py-3">
-            <a
-              class="demo card h-100 text-decoration-none"
+            <a class="demo card h-100 text-decoration-none"
               href="#"
               data-files=${JSON.stringify(files)}
+              data-questions=${JSON.stringify(questions ?? [])}
             >
               <div class="card-body">
                 <h5 class="card-title">${title}</h5>
@@ -112,7 +112,14 @@ fetch("config.json")
         const fileName = file.split("/").pop();
         await DB.upload(new File([fileBlob], fileName));
       }
-  
+      const questions = JSON.parse($demo.dataset.questions);
+
+      if (questions.length) {
+
+        DB.questionInfo.schema = JSON.stringify(DB.schema());
+
+        DB.questionInfo.questions = questions;
+      }  
       drawTables();
     }
   });
