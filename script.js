@@ -320,9 +320,7 @@ async function drawTables() {
         class="form-control"
         rows="5"
       >You'll answer the user's question based on this SQLite schema:
-1. Guess my objective in asking this.
-2. Describe the steps to achieve this objective in SQL.
-3. Write SQL to answer the question. Use SQLite syntax.
+1. Write SQL to answer the question. Use SQLite syntax.
 
 Replace generic filter values (e.g. "a location", "specific region", etc.) by querying a random value from data.
 Wrap columns with spaces inside [].
@@ -485,7 +483,7 @@ AUM) are properly summed for the correct period.</textarea>
     if (error) return notify("danger", "Error", JSON.stringify(error));
     render(
       [
-        tables,
+        
         systemPrompt,
         html`<div class="mx-auto narrative my-3">
           <h2 class="h6">Sample questions</h2>
@@ -526,9 +524,7 @@ ${DB.schema()
   .map(({ sql }) => sql)
   .join("\n\n")}
 
-1. Guess my objective in asking this.
-2. Describe the steps to achieve this objective in SQL.
-3. Write SQL to answer the question. Use SQLite sytax.
+1. Write SQL to answer the question. Use SQLite sytax.
 
 Replace generic filter values (e.g. "a location", "specific region", etc.) by querying a random value from data.
 Wrap columns with spaces inside [].
