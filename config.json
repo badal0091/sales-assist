@@ -3,7 +3,7 @@
       {
         "title": "Sample Data",
         "files": [
-        "Updated Structured Data for Customer and Sales View/activity data.csv",
+        "Updated Structured Data for Customer and Sales View/Activity Details.csv",
         "Updated Structured Data for Customer and Sales View/Advisor Data.csv",
         "Updated Structured Data for Customer and Sales View/Asset data.csv",
         "Updated Structured Data for Customer and Sales View/Audit History.csv",
@@ -15,12 +15,14 @@
         "Updated Structured Data for Customer and Sales View/Website data.csv"
       ],
       "questions": [
-        " Give me the list of advisor who has not been contacted by Sales AM 1 from December-24 onwards?",
-        " Which advisor  had Download when visited website pertaining to ETF page for Sales AM 1?",
-        "Which Advisor visited the website through Email medium in December  under Sales AM 1 along with  which website url visited?",
-        "Which advisor visited website pertaining income product page in month of Dec 24?"
+        "Give me the list of advisor who has not been contacted by Sales AM 1 from December-24 onwards?",
+        "Which traffic medium has the highest total engagement time under Sales AM 1?",
+        "What are the top 5 event types recorded in the dataset for month of Dec-24?",
+        "Which advisor under Sales AM 1 visited website pertaining Income product page in month of Dec-24?",
+        "Give an engagement summary for Claudia George with topic discussed?",
+        "How many advisors are located in every state under Sales AM 1 .Give me top 5 states?",
+        "What was the average engagement time on the website for Claudia George in the month of December 2024?"
       ]
       }
     ]
   }
-  
