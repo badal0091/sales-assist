@@ -372,7 +372,7 @@ ${DB.schema()
   .map(({ sql }) => sql)
   .join("\n\n")}
 
-1. Write SQL to answer the question. Use SQLite sytax.
+Write only SQL to answer the question. Use SQLite sytax. Also, write before SQL query, "This is SQL query generated based on above results-"
 
 Replace generic filter values (e.g. "a location", "specific region", etc.) by querying a random value from data.
 Wrap columns with spaces inside [].
@@ -524,14 +524,15 @@ AUM) are properly summed for the correct period.`,
   if (data.length > 0) {
     latestQueryResult = data;
     const actions = html`
-      <div class="row align-items-center g-2">
-        <div class="col-auto">
-          <button id="download-button" type="button" class="btn btn-primary">
-            <i class="bi bi-filetype-csv"></i>
-            Download CSV
-          </button>
-        </div>
-      </div>
+      <div class="row d-flex justify-content-end align-items-center g-2">
+  <div class="col-auto">
+    <button id="download-button" type="button" class="btn btn-primary">
+      <i class="bi bi-filetype-csv"></i>
+      Download CSV
+    </button>
+  </div>
+</div>
+
     `;
     const tableHtml = renderTable(data.slice(0, 100));
     render([actions, tableHtml], $result);
